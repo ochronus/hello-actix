@@ -24,6 +24,12 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // Load environment variables from .env if present
+    let _ = dotenvy::dotenv();
+
+    // Read port from PORT env var, default to 1337
+    let port: u16 = std::env::var("PORT").ok().and_then(|s| s.parse().ok()).unwrap_or(1337);
+
     let secret_key = Key::generate();
 
     HttpServer::new(move || {
@@ -39,7 +45,7 @@ async fn main() -> std::io::Result<()> {
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })
-    .bind(("127.0.0.1", 1337))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }

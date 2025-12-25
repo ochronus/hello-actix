@@ -126,7 +126,7 @@ deny: ## cargo-deny checks: advisories, bans, sources
 fix: fmt taplo shfmt-fmt ## Auto-format sources (Rust, TOML, shell)
 
 .PHONY: lint
-lint: fmt-check clippy taplo-check md-lint typos shellcheck shfmt-check audit deny actionlint ## Run all checks
+lint: trailing-whitespace-check eof-check fmt-check clippy taplo-check md-lint typos shellcheck shfmt-check audit deny actionlint pre-commit-run ## Run all checks
 
 .PHONY: ci
 ci: lint ## Alias for CI job locally
@@ -182,6 +182,48 @@ bootstrap: ## Install Rust toolchain, system dependencies, and CLI tools
 # --------------------------------------------------------------------------------------
 # Misc
 # --------------------------------------------------------------------------------------
+
+.PHONY: trailing-whitespace-check
+trailing-whitespace-check: ## Fail on trailing whitespace in tracked text files
+	@set -e; \
+	if command -v git >/dev/null 2>&1; then \
+	  files="$$(git ls-files)"; \
+	else \
+	  files="$$(find . -type f -not -path './.git/*' -not -path './target/*')"; \
+	fi; \
+	status=0; \
+	for f in $$files; do \
+	  grep -I -n -E "[[:blank:]]+$$" "$$f" >/dev/null && { echo "Trailing whitespace: $$f"; status=1; }; \
+	done; \
+	exit $$status
+
+.PHONY: eof-check
+eof-check: ## Fail if tracked text files don't end with a newline
+	@set -e; \
+	if command -v git >/dev/null 2>&1; then \
+	  files="$$(git ls-files)"; \
+	else \
+	  files="$$(find . -type f -not -path './.git/*' -not -path './target/*')"; \
+	fi; \
+	status=0; \
+	for f in $$files; do \
+	  [ -s "$$f" ] || continue; \
+	  last=$$(tail -c1 "$$f" | od -An -t u1 | tr -d ' '); \
+	  if [ "$$last" != "10" ]; then \
+	    echo "Missing trailing newline at EOF: $$f"; \
+	    status=1; \
+	  fi; \
+	done; \
+	exit $$status
+
+.PHONY: pre-commit-run
+pre-commit-run: ## Run pre-commit hooks (required)
+	@if command -v pre-commit >/dev/null 2>&1; then \
+		pre-commit run --all-files --show-diff-on-failure; \
+	else \
+		echo "pre-commit not found. Install via 'make tools' (pipx/pip) and retry."; \
+		exit 1; \
+	fi
 
 .PHONY: clean
 clean: ## Clean cargo artifacts

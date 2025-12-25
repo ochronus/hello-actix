@@ -11,3 +11,4 @@ actix-session = { version = "0.11.0", features = [
   "redis-pool",
 ] }
 actix-web = "4"
+dotenvy = "0.15"

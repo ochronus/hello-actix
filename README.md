@@ -14,8 +14,9 @@ Endpoints:
 - POST /echo → echoes the request body
 - GET /hey → “Hey there!”
 
-The server binds to 127.0.0.1:1337 by default and generates a random cookie key
-at startup. This setup is for local/dev use (cookie secure = false).
+The server binds to 0.0.0.0:PORT (defaults to 1337) and generates a random
+cookie key at startup. The application also loads environment variables from a
+.env file (via dotenvy). This setup is for local/dev use (cookie secure = false).
 
 ---
 
@@ -32,7 +33,11 @@ sh scripts/bootstrap.sh
 1. Run the server
 
 ```sh
+# Option A: default port 1337 (or PORT from .env)
 cargo run
+
+# Option B: override the port from the environment for this run
+PORT=8080 cargo run
 ```
 
 1. Verify
@@ -303,7 +308,7 @@ pre-commit install --hook-type pre-commit --hook-type pre-push
   for local development.
 - Not suitable for production without revisiting session storage, key management,
   TLS, and other security considerations.
-- Listening address/port: 127.0.0.1:1337
+- Listening address/port: 0.0.0.0:$PORT (defaults to 1337; .env supported via dotenvy)
 
 ---
 
@@ -334,4 +339,3 @@ make lint
 
 - Prefer fixing lints over disabling them. If you must allow something, document
   the rationale with a comment or in the PR description.
-
