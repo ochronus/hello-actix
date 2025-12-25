@@ -1,6 +1,4 @@
-use actix_session::{
-    Session, SessionMiddleware, config::PersistentSession, storage::CookieSessionStore,
-};
+use actix_session::{SessionMiddleware, config::PersistentSession, storage::CookieSessionStore};
 
 use actix_web::{
     App, HttpResponse, HttpServer, Responder,

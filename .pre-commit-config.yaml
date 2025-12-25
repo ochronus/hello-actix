@@ -1,0 +1,116 @@
+# Pre-commit configuration for local checks
+# Install: pipx install pre-commit  (or pip install pre-commit)
+# Enable:  pre-commit install --hook-type pre-commit --hook-type pre-push
+# Run all: pre-commit run --all-files
+minimum_pre_commit_version: "3.0.0"
+
+default_stages:
+  - commit
+  - push
+
+# Exclude typical generated/third-party content from generic checks
+exclude: |
+  (^target/)|(^\.git/)|(^\.idea/)|(^\.vscode/)
+
+repos:
+  # Lightweight, general-purpose hygiene checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # Local tools that should already be installed on your system (cargo, taplo, etc.)
+  - repo: local
+    hooks:
+      # Rust formatting
+      - id: cargo-fmt
+        name: cargo fmt (rustfmt)
+        entry: bash -c 'cargo fmt --all -- --check'
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+      # Rust lints
+      - id: cargo-clippy
+        name: cargo clippy
+        entry: bash -c 'cargo clippy --all-targets --all-features -- -D warnings'
+        language: system
+        # Run if Rust or Cargo files changed
+        files: '^(Cargo\.toml|Cargo\.lock|src/|crates/)'
+        pass_filenames: false
+
+      # TOML formatting/linting (Taplo)
+      - id: taplo
+        name: taplo fmt --check
+        entry: bash -c 'taplo fmt --check'
+        language: system
+        files: '\.toml$'
+        pass_filenames: false
+
+      # Markdown style
+      - id: markdownlint
+        name: markdownlint
+        entry: bash -c 'shopt -s globstar nullglob; files=(**/*.md); if [ ${#files[@]} -gt 0 ]; then markdownlint "${files[@]}"; else echo "No Markdown files found."; fi'
+        language: system
+        files: '\.md$'
+        pass_filenames: false
+        require_serial: true
+
+      # Spell checking
+      - id: typos
+        name: typos (spell checker)
+        entry: bash -c 'typos'
+        language: system
+        pass_filenames: false
+
+      # GitHub Actions workflow lint
+      - id: actionlint
+        name: actionlint (GitHub Actions)
+        entry: bash -c 'actionlint'
+        language: system
+        files: '^\.github/workflows/.*\.ya?ml$'
+        pass_filenames: false
+
+      # Shell script static analysis
+      - id: shellcheck
+        name: shellcheck (shell scripts)
+        entry: bash -c 'shopt -s globstar nullglob; files=(**/*.sh); if [ ${#files[@]} -gt 0 ]; then shellcheck "${files[@]}"; else echo "No shell scripts found."; fi'
+        language: system
+        pass_filenames: false
+
+      # Shell formatting
+      - id: shfmt
+        name: shfmt (shell formatting)
+        entry: bash -c 'shfmt -i 2 -ci -sr -d .'
+        language: system
+        pass_filenames: false
+
+      # Security advisories check (RustSec)
+      - id: cargo-audit
+        name: cargo audit (RustSec advisories)
+        entry: bash -c 'cargo audit'
+        language: system
+        pass_filenames: false
+        stages: [push]
+
+      # Dependency policy checks (bans, sources)
+      - id: cargo-deny
+        name: cargo deny (advisories, bans, sources)
+        entry: bash -c 'cargo deny check advisories && cargo deny check bans && cargo deny check sources'
+        language: system
+        pass_filenames: false
+        stages: [manual]
+
+      # Check for outdated dependencies (informational; manual)
+      - id: cargo-outdated
+        name: cargo outdated (report)
+        entry: bash -c 'cargo outdated -R'
+        language: system
+        pass_filenames: false
+        stages: [manual]

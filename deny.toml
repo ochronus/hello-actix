@@ -1,0 +1,65 @@
+# cargo-deny configuration
+# Docs: https://embarkstudios.github.io/cargo-deny/
+
+# 1) Security advisories from RustSec
+[advisories]
+# Treat known vulnerabilities as a hard error
+# vulnerability = "deny"
+# Older, unmaintained crates should be upgraded but won't fail CI outright
+unmaintained = "workspace"
+# Yanked versions should be upgraded soon
+yanked = "warn"
+# Notices (informational advisories) as warnings
+# notice = "warn"
+
+# Where to fetch the advisory database from (default is RustSec)
+db-urls = ["https://github.com/RustSec/advisory-db"]
+
+# If you temporarily need to ignore a specific advisory, add its ID here.
+# Example: "RUSTSEC-YYYY-XXXX"
+ignore = []
+
+
+# 2) Bans: control duplicate versions and wildcard deps
+[bans]
+# Highlight all problems in the output
+highlight = "all"
+
+# Discourage multiple versions of the same crate (can be hard to fully avoid)
+multiple-versions = "warn"
+
+# Disallow wildcard dependency requirements like "*"
+wildcards = "deny"
+
+# Explicit deny/allow lists (empty by default)
+allow = []
+deny  = []
+
+# If you must allow a specific crate/version subtree temporarily,
+# you can skip it here. Prefer adding a justification in a comment.
+skip      = []
+skip-tree = []
+
+
+# 3) Sources: restrict where dependencies can come from
+[sources]
+# Forbid pulling from unknown registries or git sources unless explicitly allowed
+unknown-git      = "deny"
+unknown-registry = "deny"
+
+# Allow only crates.io as a registry source
+# You can also use the long URL form:
+# allowed-registries = ["https://github.com/rust-lang/crates.io-index"]
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+
+# If you need to allow specific git sources, list them here
+allow-git = []
+
+
+# If you encounter edge cases where a crate’s license expression is unusual or
+# cargo-deny misdetects, add per-crate exceptions here. Example:
+#
+# [[licenses.exceptions]]
+# name = "some-crate"
+# version = ">=1.2.3, <2"
+# allow = ["OpenSSL"]

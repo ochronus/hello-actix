@@ -1,8 +1,13 @@
 [package]
-name = "hello-actix"
-version = "0.1.0"
 edition = "2024"
+name    = "hello-actix"
+version = "0.1.0"
 
 [dependencies]
-actix-session = { version = "0.11.0", features = ["cookie-session", "redis-session", "redis-session-native-tls", "redis-pool"] }
+actix-session = { version = "0.11.0", features = [
+  "cookie-session",
+  "redis-session",
+  "redis-session-native-tls",
+  "redis-pool",
+] }
 actix-web = "4"

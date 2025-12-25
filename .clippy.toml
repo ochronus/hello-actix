@@ -1,0 +1,19 @@
+# Clippy configuration (valid keys only; kebab-case)
+
+# Reasonable thresholds
+cognitive-complexity-threshold = 30
+too-many-arguments-threshold   = 8
+too-many-lines-threshold       = 300
+type-complexity-threshold      = 300
+
+# Prefer explicit imports
+warn-on-all-wildcard-imports = true
+
+# Keep tests pragmatic
+allow-dbg-in-tests              = true
+allow-expect-in-tests           = true
+allow-indexing-slicing-in-tests = true
+allow-panic-in-tests            = true
+allow-print-in-tests            = true
+allow-unwrap-in-tests           = true
+allow-useless-vec-in-tests      = true

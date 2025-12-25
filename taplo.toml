@@ -1,0 +1,13 @@
+# Taplo configuration for TOML formatting
+# Docs: https://taplo.tamasfe.dev/configuration/
+# Simplified to only stable format options.
+
+[formatting]
+# Keep lines readable
+column_width = 100
+
+# Align values within tables for better readability
+align_entries = true
+
+# Reorder keys in tables to achieve a consistent layout
+reorder_keys = true

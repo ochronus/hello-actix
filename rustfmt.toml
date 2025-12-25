@@ -1,0 +1,23 @@
+# Rustfmt configuration for consistent formatting across the repository.
+# Reference: https://rust-lang.github.io/rustfmt/
+
+# Line width and layout
+max_width            = 100
+newline_style        = "Unix"
+use_small_heuristics = "Max"
+# wrap_comments is unstable on stable rustfmt; omitted
+
+# Imports organization
+reorder_imports = true
+# imports_granularity is unstable on stable rustfmt; omitted
+# group_imports is unstable on stable rustfmt; omitted
+
+# Comment normalization
+# normalize_comments is unstable on stable rustfmt; omitted
+# normalize_doc_attributes is unstable on stable rustfmt; omitted
+# format_code_in_doc_comments is unstable on stable rustfmt; omitted
+
+# Misc readability improvements
+merge_derives            = true
+use_field_init_shorthand = true
+# condense_wildcard_suffixes is unstable on stable rustfmt; omitted
