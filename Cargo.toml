@@ -4,6 +4,7 @@ name    = "hello-actix"
 version = "0.1.0"
 
 [dependencies]
+actix-identity = "0.9.0"
 actix-session = { version = "0.11.0", features = [
   "cookie-session",
   "redis-session",
