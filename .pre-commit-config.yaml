@@ -5,8 +5,8 @@
 minimum_pre_commit_version: "3.0.0"
 
 default_stages:
-  - commit
-  - push
+  - pre-commit
+  - pre-push
 
 # Exclude typical generated/third-party content from generic checks
 exclude: |
@@ -97,7 +97,7 @@ repos:
         entry: bash -c 'cargo audit'
         language: system
         pass_filenames: false
-        stages: [push]
+        stages: [pre-push]
 
       # Dependency policy checks (bans, sources)
       - id: cargo-deny
