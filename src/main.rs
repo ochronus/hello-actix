@@ -63,6 +63,14 @@ async fn main() -> std::io::Result<()> {
 
     let secret_key = Key::generate();
 
+    /*
+    HttpServer::new` stores the factory closure and calls it later on worker threads. That means the closure must be `'static` (can outlive the current stack frame) and `Send`.
+    - Without `move`, the closure would capture `secret_key` by reference (`&secret_key`), tying the closure’s lifetime to the `main` stack frame. The compiler then complains that the closure may outlive the borrowed value.
+    - Using `move` makes the closure own the `secret_key`, satisfying the `'static` requirement so Actix can send the closure to worker threads and call it later.
+
+    The closure is called once per worker to build an `App`. Since the key is moved into the closure environment once, each call clones it (`secret_key.clone()`) so each `App` gets its own copy while all copies hold the same underlying key material.
+
+    */
     HttpServer::new(move || {
         App::new()
             .wrap(IdentityMiddleware::default())
