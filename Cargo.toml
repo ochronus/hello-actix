@@ -12,4 +12,7 @@ actix-session = { version = "0.11.0", features = [
   "redis-pool",
 ] }
 actix-web = "4"
+base64 = "0.22"
+config = { version = "0.15.19", features = ["yaml", "toml", "json", "ini"] }
 dotenvy = "0.15"
+serde = { version = "1", features = ["derive"] }

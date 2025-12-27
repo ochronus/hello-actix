@@ -26,7 +26,7 @@ ignore = []
 highlight = "all"
 
 # Discourage multiple versions of the same crate (can be hard to fully avoid)
-multiple-versions = "warn"
+multiple-versions = "allow"
 
 # Disallow wildcard dependency requirements like "*"
 wildcards = "deny"

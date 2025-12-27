@@ -14,9 +14,10 @@ Endpoints:
 - POST /echo → echoes the request body
 - GET /hey → “Hey there!”
 
-The server binds to 0.0.0.0:PORT (defaults to 1337) and generates a random
-cookie key at startup. The application also loads environment variables from a
-.env file (via dotenvy). This setup is for local/dev use (cookie secure = false).
+The server binds to 0.0.0.0:$APP_PORT (defaults to 1337; `PORT` overrides if set).
+Configuration is strongly typed and loaded from a `.env` file and environment variables.
+Session cookies are signed/encrypted; in `prod` mode (default) cookies are
+`Secure`, while in `dev`/`test` they are not.
 
 ---
 
@@ -285,6 +286,8 @@ pre-commit install --hook-type pre-commit --hook-type pre-push
 
 ## Project structure
 
+- docs/configuration.md — configuration reference (.env and environment variables)
+- docs/architecture.md — architecture overview and design choices
 - src/main.rs — Actix Web app with session middleware and a few routes
 - Cargo.toml — package manifest
 - rustfmt.toml — Rust formatter config (stable options)
@@ -304,11 +307,11 @@ pre-commit install --hook-type pre-commit --hook-type pre-push
 
 ## App notes
 
-- Session middleware uses a random key generated at runtime and cookie_secure = false
-  for local development.
-- Not suitable for production without revisiting session storage, key management,
-  TLS, and other security considerations.
-- Listening address/port: 0.0.0.0:$PORT (defaults to 1337; .env supported via dotenvy)
+- Session cookies are signed/encrypted with a secret key. In `prod` mode (default) cookies are
+  `Secure`; in `dev`/`test` they are not.
+- Provide a stable `APP_SECRET_KEY` in production (base64:... or hex:...); do not rely on a random key.
+- Listening address/port: 0.0.0.0:$APP_PORT (defaults to 1337; `PORT` overrides if set).
+- Configuration is loaded from `.env` and environment variables; see `docs/configuration.md`.
 
 ---
 
