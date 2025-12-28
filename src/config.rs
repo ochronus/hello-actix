@@ -61,6 +61,19 @@ impl fmt::Display for RuntimeMode {
     }
 }
 
+impl std::str::FromStr for RuntimeMode {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.trim().to_ascii_lowercase().as_str() {
+            "dev" | "development" => Ok(RuntimeMode::Dev),
+            "prod" | "production" => Ok(RuntimeMode::Prod),
+            "test" | "testing" => Ok(RuntimeMode::Test),
+            other => Err(format!("invalid runtime mode: {other}")),
+        }
+    }
+}
+
 /// Newtype wrapper around `actix_web::cookie::Key` with custom deserialization.
 ///
 /// Accepts one of:
@@ -253,6 +266,13 @@ impl AppConfig {
             .add_source(cfg::Environment::with_prefix("APP").separator("__").try_parsing(true));
 
         let mut conf: AppConfig = builder.build()?.try_deserialize()?;
+
+        // Honor explicit runtime mode overrides from environment, supporting both APP_MODE and APP__MODE.
+        if let Ok(mode_s) = std::env::var("APP_MODE").or_else(|_| std::env::var("APP__MODE"))
+            && let Ok(parsed) = mode_s.parse::<RuntimeMode>()
+        {
+            conf.mode = parsed;
+        }
 
         // Honor legacy `PORT` as an override if set
         if let Ok(port_s) = std::env::var("PORT")

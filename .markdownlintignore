@@ -1,0 +1,3 @@
+# Ignore third-party dependencies and example app
+node_modules/
+actix_ssr/

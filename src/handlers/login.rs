@@ -1,21 +1,16 @@
 use actix_identity::Identity;
-use actix_web::{HttpMessage, HttpRequest, HttpResponse, Responder, post, web};
+use actix_web::{HttpMessage, HttpRequest, Responder, post};
 
 /// POST /login
 ///
-/// Attaches a verified user identity to the active session.
-/// In a real application, you'd perform authentication here (passwords, etc.).
+/// Performs a mock authentication and attaches an identity to the session,
+/// then redirects to the home page where the frontend (Inertia) reflects the
+/// authenticated state.
 #[post("/login")]
-pub async fn login(
-    request: HttpRequest,
-    _cfg: web::Data<crate::config::AppConfig>,
-) -> impl Responder {
-    // Some kind of authentication should happen here
-    // e.g. password-based, biometric, etc.
-    // [...]
+pub async fn login(request: HttpRequest) -> impl Responder {
+    // In a real application, you'd verify credentials here.
+    let _ = Identity::login(&request.extensions(), "User1".into());
 
-    // Attach a verified user identity to the active session
-    Identity::login(&request.extensions(), "User1".into()).unwrap();
-
-    HttpResponse::Ok()
+    // Redirect back to the index route so the frontend can render auth state.
+    actix_web::web::Redirect::to("/").see_other()
 }

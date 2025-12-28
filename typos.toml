@@ -3,7 +3,17 @@
 
 [files]
 # Exclude generated/build and VCS-related content
-extend-exclude = ["target/**", "Cargo.lock", ".git/**", ".github/**", ".vscode/**", ".idea/**"]
+extend-exclude = [
+  "target/**",
+  "Cargo.lock",
+  ".git/**",
+  ".github/**",
+  ".vscode/**",
+  ".idea/**",
+  "node_modules/**",
+  "public/bundle/**",
+  "dist/ssr/**",
+]
 
 [default]
 # Ignore common patterns that shouldn't be spellchecked

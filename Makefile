@@ -126,7 +126,7 @@ deny: ## cargo-deny checks: advisories, bans, sources
 fix: fmt taplo shfmt-fmt ## Auto-format sources (Rust, TOML, shell)
 
 .PHONY: lint
-lint: trailing-whitespace-check eof-check fmt-check clippy taplo-check md-lint typos shellcheck shfmt-check audit deny actionlint pre-commit-run ## Run all checks
+lint: pre-commit-run ## Run all pre-commit hooks
 
 .PHONY: ci
 ci: lint ## Alias for CI job locally

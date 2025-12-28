@@ -1,0 +1,41 @@
+{
+  "name": "hello-actix",
+  "version": "1.0.0",
+  "description": "A minimal Actix Web application with session middleware and a production-ready developer workflow:",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --ssr",
+    "serve": "node --watch dist/ssr/ssr",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ochronus/hello-actix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ochronus/hello-actix/issues"
+  },
+  "homepage": "https://github.com/ochronus/hello-actix#readme",
+  "dependencies": {
+    "@inertiajs/core": "^2.3.4",
+    "@inertiajs/react": "^2.3.4",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-react": "^5.1.2",
+    "laravel-vite-plugin": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.0"
+  }
+}

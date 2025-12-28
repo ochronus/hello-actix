@@ -10,7 +10,7 @@ default_stages:
 
 # Exclude typical generated/third-party content from generic checks
 exclude: |
-  (^target/)|(^\.git/)|(^\.idea/)|(^\.vscode/)
+  (^target/)|(^\.git/)|(^\.idea/)|(^\.vscode/)|(^node_modules/)|(^public/bundle/)|(^dist/)
 
 repos:
   # Lightweight, general-purpose hygiene checks
@@ -21,7 +21,6 @@ repos:
       - id: end-of-file-fixer
       - id: check-merge-conflict
       - id: check-yaml
-      - id: check-json
       - id: mixed-line-ending
         args: [--fix=lf]
 

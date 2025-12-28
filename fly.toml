@@ -9,7 +9,8 @@ primary_region = 'ams'
 [build]
 
 [env]
-PORT = '8080'
+APP_MODE = 'prod'
+PORT     = '8080'
 
 [http_service]
 auto_start_machines  = true

@@ -1,0 +1,20 @@
+{
+  "www/app.tsx": {
+    "file": "assets/app-yVSg0IKS.js",
+    "name": "app",
+    "src": "www/app.tsx",
+    "isEntry": true,
+    "css": [
+      "assets/index-CHCcHqfk.css"
+    ]
+  },
+  "www/index.css": {
+    "file": "assets/index-CHCcHqfk.css",
+    "src": "www/index.css",
+    "isEntry": true,
+    "name": "index",
+    "names": [
+      "index.css"
+    ]
+  }
+}
