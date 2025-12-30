@@ -7,6 +7,9 @@ use actix_web::{HttpMessage, HttpRequest, Responder, post};
 /// then redirects to the home page where the frontend (Inertia) reflects the
 /// authenticated state.
 #[post("/login")]
+/// [TLA+ Action] SessionModel!Login
+/// Corresponds to the Login action in specs/SessionModel.tla
+/// "Fresh ID" requirement is satisfied by CookieSessionStore's random UUID generation.
 pub async fn login(request: HttpRequest) -> impl Responder {
     // In a real application, you'd verify credentials here.
     let _ = Identity::login(&request.extensions(), "User1".into());

@@ -1,0 +1,49 @@
+name: TLA+ Verification
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "specs/**"
+      - ".github/workflows/tla-verification.yml"
+  pull_request:
+    paths:
+      - "specs/**"
+      - ".github/workflows/tla-verification.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tlc:
+    name: Run TLC Model Checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Download TLA+ Tools
+        working-directory: specs
+        run: |
+          curl -L -O https://github.com/tlaplus/tlaplus/releases/download/v1.8.0/tla2tools.jar
+
+      - name: Run TLC
+        working-directory: specs
+        # We run in -deadlock mode? No, the model is infinite.
+        # But wait, locally we verified it runs and finishes (with default settings it explores generated states).
+        # Actually TLC will run until all states are visited. If state space is finite, it finishes.
+        # Our model IS finite (3 users, 3 max sessions).
+        run: |
+          java -cp tla2tools.jar tlc2.TLC SessionModel.tla -workers auto

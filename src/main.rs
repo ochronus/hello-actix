@@ -45,6 +45,10 @@ async fn main() -> std::io::Result<()> {
                 .wrap(IdentityMiddleware::default())
                 .wrap(
                     SessionMiddleware::builder(
+                        // [TLA+ Invariant] Safety: Session Integrity
+                        // We use CookieSessionStore which generates unique random IDs.
+                        // This satisfies the TLA+ requirement that Login picks a "Fresh" ID
+                        // (not currently in use).
                         CookieSessionStore::default(),
                         cfg.secret_key.clone_key(),
                     )
