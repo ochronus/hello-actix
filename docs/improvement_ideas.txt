@@ -1,0 +1,48 @@
+Codebase Analysis & Improvement Plan
+Overview
+The hello-actix project is a modern specific web application architecture combining Actix Web (Rust) for the backend and Vite/React for the frontend, bridged by Inertia.rs. The structure is clean and modular.
+
+User Review Required
+IMPORTANT
+
+The codebase currently lacks automated tests (#[cfg(test)] search yielded no results). This is a critical risk for production stability.
+
+Proposed Changes
+1. Add Automated Tests
+There are no tests currently. We should implement:
+
+Unit Tests: For
+config.rs
+ (parsing logic) and handlers.
+Integration Tests: Test the full request/response cycle for critical paths like Login/Index using actix_web::test.
+[NEW]
+tests/integration_test.rs
+Create a basic integration test suite.
+2. Improve Error Handling
+Currently,
+main.rs
+ maps errors to std::io::Error.
+
+Recommendation: Adopt anyhow for application-level error handling or define a custom AppError enum using thiserror for structured errors.
+3. Enhance Security & observability
+Secrets:
+src/config.rs
+ implements custom
+SecretKey
+ parsing.
+Recommendation: Use the secrecy crate to ensure secrets are zeroed out in memory and better protected.
+Logging: env_logger is used.
+Recommendation: Switch to tracing (with tracing-actix-web and tracing-subscriber) for structured logging and potential future async context tracking.
+4. Refactor SSR Management
+The SSR process management in
+main.rs
+ is manual (spawning a node process).
+
+Recommendation: Extract this into a dedicated SSRManager struct in a new module to encapsulate start/stop/health-check logic.
+Verification Plan
+Automated Tests
+Run cargo test after adding the new test suite.
+Run cargo clippy to ensure no new lints are introduced.
+Manual Verification
+Start the server (cargo run) and verify the frontend still loads via browser.
+Verify Login/Logout flows work manually.
