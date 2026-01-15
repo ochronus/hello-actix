@@ -26,7 +26,7 @@
   "homepage": "https://github.com/ochronus/hello-actix#readme",
   "dependencies": {
     "@inertiajs/core": "^2.3.6",
-    "@inertiajs/react": "^2.3.6",
+    "@inertiajs/react": "^2.3.9",
     "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-react": "^5.1.2",
