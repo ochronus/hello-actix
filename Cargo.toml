@@ -4,7 +4,7 @@ name    = "hello-actix"
 version = "0.1.0"
 
 [dependencies]
-actix-files = "0.6.9"
+actix-files = "0.6.10"
 actix-identity = "0.9.0"
 actix-session = { version = "0.11.0", features = [
   "cookie-session",
